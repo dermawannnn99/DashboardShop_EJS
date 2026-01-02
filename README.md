@@ -1,4 +1,3 @@
-[README.md](https://github.com/user-attachments/files/24405567/README.md)
 # 🛒 Toko Admin - Sistem Inventori Toko
 
 Aplikasi web untuk mengelola inventori toko dengan fitur CRUD produk, pembelian, tracking stock, dan history pergerakan barang.
