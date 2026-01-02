@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %> - Admin Toko</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <h1>🛒 Admin Toko</h1>
+            <ul class="nav-menu">
+                <li><a href="/">Dashboard</a></li>
+                <li><a href="/products">Produk</a></li>
+                <li><a href="/purchases">Pembelian</a></li>
+                <li><a href="/purchases/add" class="btn-primary">+ Tambah Pembelian</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container main-content">
+        <%- body %>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Admin Toko. Built with Node.js & Express</p>
+        </div>
+    </footer>
+</body>
+</html>

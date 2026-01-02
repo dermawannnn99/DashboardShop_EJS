@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="main-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <img src="/css/images/logo.png" alt="Logo" class="logo-image">
+                </div>
+                <button class="sidebar-toggle" onclick="toggleSidebar()">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+                    </svg>
+                </button>
+            </div>
+
+            <nav class="sidebar-menu">
+                <div class="menu-section">
+                    <div class="menu-label">Menu Utama</div>
+                    <a href="/" class="menu-item">
+                        <div class="menu-icon" style="background: url('/icons/dashboard.svg') center/contain no-repeat;"></div>
+                        <span class="menu-text">Dashboard</span>
+                    </a>
+                    <a href="/products" class="menu-item">
+                        <div class="menu-icon" style="background: url('/icons/products.svg') center/contain no-repeat;"></div>
+                        <span class="menu-text">Produk</span>
+                    </a>
+                    <a href="/purchases" class="menu-item active">
+                        <div class="menu-icon" style="background: url('/icons/purchases.svg') center/contain no-repeat;"></div>
+                        <span class="menu-text">Pembelian</span>
+                    </a>
+                </div>
+
+                <div class="menu-section">
+                    <div class="menu-label">Transaksi</div>
+                    <a href="/purchases/add" class="menu-item">
+                        <div class="menu-icon" style="background: url('/icons/add.svg') center/contain no-repeat;"></div>
+                        <span class="menu-text">Tambah Pembelian</span>
+                    </a>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="main-content-wrapper">
+            <!-- Top Bar -->
+            <header class="top-bar">
+                <h1 class="page-title"><%= title %></h1>
+                <div class="top-bar-actions">
+                    <div class="user-profile">
+                        <div class="user-avatar">AD</div>
+                        <span>Admin</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main Content Area -->
+            <main class="main-content">
+                <div class="content-section">
+                    <div class="section-header">
+                        <h2 class="section-title">Riwayat Pembelian</h2>
+                        <a href="/purchases/add" class="btn btn-primary">
+                            <img src="/icons/plus.svg" class="btn-icon" style="filter: brightness(0) invert(1);">
+                            Tambah Pembelian
+                        </a>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Produk</th>
+                                    <th>Harga Satuan</th>
+                                    <th>Jumlah</th>
+                                    <th>Total Harga</th>
+                                    <th>Tanggal</th>
+                                    <th>Status</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% if (purchases.length === 0) { %>
+                                    <tr>
+                                        <td colspan="8" style="text-align: center; padding: 40px; color: var(--medium-gray);">
+                                            Belum ada data pembelian
+                                        </td>
+                                    </tr>
+                                <% } else { %>
+                                    <% purchases.forEach(purchase => { %>
+                                    <tr class="<%= purchase.status === 'cancelled' ? 'cancelled-row' : '' %>">
+                                        <td><strong>#<%= purchase.id %></strong></td>
+                                        <td><strong><%= purchase.nama_produk %></strong></td>
+                                        <td>Rp <%= Number(purchase.harga).toLocaleString('id-ID') %></td>
+                                        <td><%= purchase.jumlah %> unit</td>
+                                        <td><strong>Rp <%= Number(purchase.total_harga).toLocaleString('id-ID') %></strong></td>
+                                        <td>
+                                            <%= new Date(purchase.tanggal_pembelian).toLocaleString('id-ID', {
+                                                day: '2-digit',
+                                                month: 'short',
+                                                year: 'numeric',
+                                                hour: '2-digit',
+                                                minute: '2-digit'
+                                            }) %>
+                                        </td>
+                                        <td>
+                                            <% if (purchase.status === 'success') { %>
+                                                <span class="badge badge-success">Berhasil</span>
+                                            <% } else { %>
+                                                <span class="badge badge-danger">Dibatalkan</span>
+                                                <% if (purchase.cancelled_at) { %>
+                                                    <br><small style="color: var(--medium-gray); font-size: 11px;">
+                                                        <%= new Date(purchase.cancelled_at).toLocaleString('id-ID', {
+                                                            day: '2-digit',
+                                                            month: 'short',
+                                                            hour: '2-digit',
+                                                            minute: '2-digit'
+                                                        }) %>
+                                                    </small>
+                                                <% } %>
+                                            <% } %>
+                                        </td>
+                                        <td>
+                                            <% if (purchase.status === 'success') { %>
+                                                <form action="/purchases/<%= purchase.id %>/cancel" method="POST" 
+                                                      style="display: inline;"
+                                                      onsubmit="return confirm('Apakah Anda yakin ingin membatalkan pembelian ini? Stock akan dikembalikan.')">
+                                                    <button type="submit" class="btn btn-danger btn-sm">
+                                                        <img src="/icons/close.svg" class="btn-icon" style="filter: brightness(0) invert(1);">
+                                                        Cancel
+                                                    </button>
+                                                </form>
+                                            <% } else { %>
+                                                <span style="color: var(--medium-gray);">-</span>
+                                            <% } %>
+                                        </td>
+                                    </tr>
+                                    <% }) %>
+                                <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </main>
+
+            <!-- Footer -->
+            <footer>
+                <p>&copy; 2024 Toko Admin. Built with Node.js & Express</p>
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('collapsed');
+        }
+    </script>
+</body>
+</html>
