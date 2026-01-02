@@ -75,7 +75,7 @@ body {
     gap: 12px;
 }
 
-/* Logo Image - PERBAIKAN */
+/* Logo Image */
 .logo-image {
     width: 100%;
     height: auto;
@@ -86,11 +86,9 @@ body {
     display: block;
 }
 
-/* Saat sidebar collapsed - MAINTAIN ASPECT RATIO */
 .sidebar.collapsed .logo-image {
     max-width: 50px;
     max-height: 30px;
-    /* width dan height: auto tetap, jadi aspect ratio terjaga */
 }
 
 .sidebar-toggle {
@@ -406,6 +404,12 @@ body {
     color: white;
 }
 
+.btn-danger:hover {
+    background: #dc2626;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(239, 68, 68, 0.3);
+}
+
 .btn-sm {
     padding: 6px 12px;
     font-size: 13px;
@@ -515,17 +519,24 @@ body {
 }
 
 .form-group input,
-.form-group select {
+.form-group select,
+.form-group textarea {
     width: 100%;
     padding: 12px 15px;
     border: 1px solid var(--light-gray);
     border-radius: 8px;
     font-size: 14px;
     transition: all 0.3s;
+    font-family: inherit;
+}
+
+.form-group textarea {
+    resize: vertical;
 }
 
 .form-group input:focus,
-.form-group select:focus {
+.form-group select:focus,
+.form-group textarea:focus {
     outline: none;
     border-color: var(--primary-blue);
     box-shadow: 0 0 0 3px var(--light-blue);
@@ -536,6 +547,19 @@ body {
     margin-top: 5px;
     font-size: 13px;
     color: var(--medium-gray);
+}
+
+/* Product Info Box */
+.product-info {
+    background: var(--light-gray);
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 25px;
+}
+
+.product-info p {
+    margin: 8px 0;
+    font-size: 14px;
 }
 
 .purchase-summary {

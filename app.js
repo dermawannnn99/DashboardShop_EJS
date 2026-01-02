@@ -17,18 +17,20 @@ app.use(express.static('public'));
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-// Routes
+// Routes - URUTAN PENTING!
 const productRoutes = require('./routes/product');
 const purchaseRoutes = require('./routes/purchase');
 const stockRoutes = require('./routes/stock');
+const historyRoutes = require('./routes/history');
 
+// Register routes
 app.use('/products', productRoutes);
 app.use('/purchases', purchaseRoutes);
 app.use('/stock', stockRoutes);
+app.use('/history', historyRoutes);
 
 // Home route
 app.get('/', (req, res) => {
-    // Get statistics
     const queries = {
         totalProducts: 'SELECT COUNT(*) as total FROM produk',
         totalStock: 'SELECT SUM(jumlah) as total FROM stock',

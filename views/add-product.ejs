@@ -28,7 +28,7 @@
                         <div class="menu-icon" style="background: url('/icons/dashboard.svg') center/contain no-repeat;"></div>
                         <span class="menu-text">Dashboard</span>
                     </a>
-                    <a href="/products" class="menu-item active">
+                    <a href="/products" class="menu-item">
                         <div class="menu-icon" style="background: url('/icons/products.svg') center/contain no-repeat;"></div>
                         <span class="menu-text">Produk</span>
                     </a>
@@ -44,7 +44,7 @@
 
                 <div class="menu-section">
                     <div class="menu-label">Transaksi</div>
-                    <a href="/products/add" class="menu-item">
+                    <a href="/products/add" class="menu-item active">
                         <div class="menu-icon" style="background: url('/icons/add.svg') center/contain no-repeat;"></div>
                         <span class="menu-text">Tambah Produk</span>
                     </a>
@@ -71,60 +71,51 @@
 
             <!-- Main Content Area -->
             <main class="main-content">
+                <% if (error) { %>
+                    <div class="alert alert-error">
+                        <strong>Error!</strong> <%= error %>
+                    </div>
+                <% } %>
+
                 <div class="content-section">
                     <div class="section-header">
-                        <h2 class="section-title">Daftar Produk</h2>
-                        <div style="display: flex; gap: 10px;">
-                            <span class="badge badge-info"><%= products.length %> Produk</span>
-                            <a href="/products/add" class="btn btn-primary btn-sm">
-                                <img src="/icons/plus.svg" class="btn-icon" style="filter: brightness(0) invert(1);">
-                                Tambah Produk Baru
-                            </a>
-                        </div>
+                        <h2 class="section-title">Form Tambah Produk Baru</h2>
                     </div>
 
-                    <div class="table-responsive">
-                        <table class="data-table">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Nama Produk</th>
-                                    <th>Harga</th>
-                                    <th>Stock</th>
-                                    <th>Deskripsi</th>
-                                    <th>Status</th>
-                                    <th>Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <% products.forEach(product => { %>
-                                <tr>
-                                    <td><strong>#<%= product.id %></strong></td>
-                                    <td><strong><%= product.nama_produk %></strong></td>
-                                    <td>Rp <%= Number(product.harga).toLocaleString('id-ID') %></td>
-                                    <td>
-                                        <span class="badge <%= product.stock > 10 ? 'badge-success' : product.stock > 0 ? 'badge-warning' : 'badge-danger' %>">
-                                            <%= product.stock %> unit
-                                        </span>
-                                    </td>
-                                    <td><%= product.deskripsi %></td>
-                                    <td>
-                                        <% if (product.stock > 0) { %>
-                                            <span class="badge badge-success">Tersedia</span>
-                                        <% } else { %>
-                                            <span class="badge badge-danger">Habis</span>
-                                        <% } %>
-                                    </td>
-                                    <td>
-                                        <a href="/products/add-stock/<%= product.id %>" class="btn btn-primary btn-sm">
-                                            <img src="/icons/plus.svg" class="btn-icon" style="filter: brightness(0) invert(1);">
-                                            Tambah Stock
-                                        </a>
-                                    </td>
-                                </tr>
-                                <% }) %>
-                            </tbody>
-                        </table>
+                    <div class="form-card">
+                        <form action="/products/add" method="POST">
+                            <div class="form-group">
+                                <label for="nama_produk">Nama Produk *</label>
+                                <input type="text" name="nama_produk" id="nama_produk" required placeholder="Contoh: Laptop ASUS ROG">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="harga">Harga *</label>
+                                <input type="number" name="harga" id="harga" min="0" step="0.01" required placeholder="Contoh: 15000000">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="deskripsi">Deskripsi</label>
+                                <textarea name="deskripsi" id="deskripsi" rows="4" placeholder="Deskripsi produk (opsional)"></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="jumlah_stock">Jumlah Stock Awal *</label>
+                                <input type="number" name="jumlah_stock" id="jumlah_stock" min="0" required placeholder="Contoh: 10">
+                                <small class="form-text">Jumlah stock yang akan ditambahkan untuk produk baru ini</small>
+                            </div>
+
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-primary">
+                                    <img src="/icons/check.svg" class="btn-icon" style="filter: brightness(0) invert(1);">
+                                    Simpan Produk
+                                </button>
+                                <a href="/products" class="btn btn-secondary">
+                                    <img src="/icons/close.svg" class="btn-icon">
+                                    Batal
+                                </a>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </main>

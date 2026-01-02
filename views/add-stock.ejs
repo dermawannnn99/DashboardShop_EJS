@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="main-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <img src="/css/images/logo.png" alt="Logo" class="logo-image">
+                </div>
+                <button class="sidebar-toggle" onclick="toggleSidebar()">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+                    </svg>
+                </button>
+            </div>
+
+            <nav class="sidebar-menu">
+                <div class="menu-section">
+                    <div class="menu-label">Menu Utama</div>
+                    <a href="/" class="menu-item">
+                        <div class="menu-icon" style="background: url('/icons/dashboard.svg') center/contain no-repeat;"></div>
+                        <span class="menu-text">Dashboard</span>
+                    </a>
+                    <a href="/products" class="menu-item active">
+                        <div class="menu-icon" style="background: url('/icons/products.svg') center/contain no-repeat;"></div>
+                        <span class="menu-text">Produk</span>
+                    </a>
+                    <a href="/purchases" class="menu-item">
+                        <div class="menu-icon" style="background: url('/icons/purchases.svg') center/contain no-repeat;"></div>
+                        <span class="menu-text">Pembelian</span>
+                    </a>
+                    <a href="/history" class="menu-item">
+                        <div class="menu-icon" style="background: url('/icons/history.svg') center/contain no-repeat;"></div>
+                        <span class="menu-text">History</span>
+                    </a>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="main-content-wrapper">
+            <!-- Top Bar -->
+            <header class="top-bar">
+                <h1 class="page-title"><%= title %></h1>
+                <div class="top-bar-actions">
+                    <div class="user-profile">
+                        <div class="user-avatar">AD</div>
+                        <span>Admin</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main Content Area -->
+            <main class="main-content">
+                <% if (error) { %>
+                    <div class="alert alert-error">
+                        <strong>Error!</strong> <%= error %>
+                    </div>
+                <% } %>
+
+                <div class="content-section">
+                    <div class="section-header">
+                        <h2 class="section-title">Tambah Stock: <%= product.nama_produk %></h2>
+                    </div>
+
+                    <div class="form-card">
+                        <div class="product-info">
+                            <p><strong>Produk:</strong> <%= product.nama_produk %></p>
+                            <p><strong>Harga:</strong> Rp <%= Number(product.harga).toLocaleString('id-ID') %></p>
+                        </div>
+
+                        <form action="/products/add-stock/<%= product.id %>" method="POST">
+                            <div class="form-group">
+                                <label for="jumlah">Jumlah Penambahan Stock *</label>
+                                <input type="number" name="jumlah" id="jumlah" min="1" required placeholder="Contoh: 10">
+                                <small class="form-text">Berapa unit yang akan ditambahkan ke stock?</small>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="keterangan">Keterangan</label>
+                                <textarea name="keterangan" id="keterangan" rows="3" placeholder="Contoh: Pembelian dari supplier XYZ"></textarea>
+                            </div>
+
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-primary">
+                                    <img src="/icons/check.svg" class="btn-icon" style="filter: brightness(0) invert(1);">
+                                    Tambah Stock
+                                </button>
+                                <a href="/products" class="btn btn-secondary">
+                                    <img src="/icons/close.svg" class="btn-icon">
+                                    Batal
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </main>
+
+            <!-- Footer -->
+            <footer>
+                <p>&copy; 2024 Toko Admin. Built with Node.js & Express</p>
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('collapsed');
+        }
+    </script>
+</body>
+</html>

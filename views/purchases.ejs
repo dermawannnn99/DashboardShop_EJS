@@ -36,12 +36,20 @@
                         <div class="menu-icon" style="background: url('/icons/purchases.svg') center/contain no-repeat;"></div>
                         <span class="menu-text">Pembelian</span>
                     </a>
+                    <a href="/history" class="menu-item">
+                        <div class="menu-icon" style="background: url('/icons/history.svg') center/contain no-repeat;"></div>
+                        <span class="menu-text">History</span>
+                    </a>
                 </div>
 
                 <div class="menu-section">
                     <div class="menu-label">Transaksi</div>
-                    <a href="/purchases/add" class="menu-item">
+                    <a href="/products/add" class="menu-item">
                         <div class="menu-icon" style="background: url('/icons/add.svg') center/contain no-repeat;"></div>
+                        <span class="menu-text">Tambah Produk</span>
+                    </a>
+                    <a href="/purchases/add" class="menu-item">
+                        <div class="menu-icon" style="background: url('/icons/cart.svg') center/contain no-repeat;"></div>
                         <span class="menu-text">Tambah Pembelian</span>
                     </a>
                 </div>
@@ -66,10 +74,19 @@
                 <div class="content-section">
                     <div class="section-header">
                         <h2 class="section-title">Riwayat Pembelian</h2>
-                        <a href="/purchases/add" class="btn btn-primary">
-                            <img src="/icons/plus.svg" class="btn-icon" style="filter: brightness(0) invert(1);">
-                            Tambah Pembelian
-                        </a>
+                        <div style="display: flex; gap: 10px;">
+                            <a href="/purchases/add" class="btn btn-primary">
+                                <img src="/icons/plus.svg" class="btn-icon" style="filter: brightness(0) invert(1);">
+                                Tambah Pembelian
+                            </a>
+                            <form action="/purchases/reset" method="POST" style="display: inline;" 
+                                  onsubmit="return confirm('⚠️ PERHATIAN!\n\nApakah Anda yakin ingin mereset SEMUA data pembelian dan pendapatan?\n\n✅ Yang akan direset:\n- Semua riwayat pembelian\n- Total pendapatan kembali ke 0\n\n❌ Yang TIDAK terpengaruh:\n- Stock produk tetap (tidak berubah)\n- Data produk tetap ada\n\nTindakan ini TIDAK DAPAT dibatalkan!')">
+                                <button type="submit" class="btn btn-danger">
+                                    <img src="/icons/trash.svg" class="btn-icon" style="filter: brightness(0) invert(1);">
+                                    Reset Pembelian
+                                </button>
+                            </form>
+                        </div>
                     </div>
 
                     <div class="table-responsive">

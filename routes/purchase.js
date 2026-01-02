@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const db = require('../config/database');
 
-// Get all purchases
+// ====== GET: Tampilkan semua pembelian ======
 router.get('/', (req, res) => {
     const query = `
         SELECT 
@@ -31,7 +31,7 @@ router.get('/', (req, res) => {
     });
 });
 
-// Show add purchase form
+// ====== GET: Form tambah pembelian ======
 router.get('/add', (req, res) => {
     const query = `
         SELECT p.*, s.jumlah as stock
@@ -54,16 +54,15 @@ router.get('/add', (req, res) => {
     });
 });
 
-// Process add purchase
+// ====== POST: Proses tambah pembelian ======
 router.post('/add', (req, res) => {
     const { produk_id, jumlah } = req.body;
     
-    // Validate input
     if (!produk_id || !jumlah || jumlah <= 0) {
         return res.status(400).send('Invalid input');
     }
 
-    // Check stock availability
+    // Check stock
     db.query('SELECT jumlah FROM stock WHERE produk_id = ?', [produk_id], (err, stockResults) => {
         if (err) {
             console.error(err);
@@ -87,7 +86,7 @@ router.post('/add', (req, res) => {
             });
         }
 
-        // Get product price
+        // Get harga produk
         db.query('SELECT harga FROM produk WHERE id = ?', [produk_id], (err, productResults) => {
             if (err) {
                 console.error(err);
@@ -97,7 +96,7 @@ router.post('/add', (req, res) => {
             const harga = productResults[0].harga;
             const total_harga = harga * jumlah;
 
-            // Insert purchase
+            // Insert pembelian
             db.query(
                 'INSERT INTO pembelian (produk_id, jumlah, total_harga) VALUES (?, ?, ?)',
                 [produk_id, jumlah, total_harga],
@@ -116,7 +115,16 @@ router.post('/add', (req, res) => {
                                 console.error(err);
                                 return res.status(500).send('Database error');
                             }
-                            res.redirect('/purchases');
+
+                            // Insert history stock keluar
+                            db.query(
+                                'INSERT INTO stock_history (produk_id, jenis, jumlah, keterangan) VALUES (?, ?, ?, ?)',
+                                [produk_id, 'keluar', jumlah, `Pembelian #${insertResult.insertId}`],
+                                (err) => {
+                                    if (err) console.error(err);
+                                    res.redirect('/purchases');
+                                }
+                            );
                         }
                     );
                 }
@@ -125,11 +133,10 @@ router.post('/add', (req, res) => {
     });
 });
 
-// Cancel purchase
+// ====== POST: Cancel pembelian ======
 router.post('/:id/cancel', (req, res) => {
     const purchaseId = req.params.id;
 
-    // Get purchase details
     db.query(
         'SELECT * FROM pembelian WHERE id = ? AND status = "success"',
         [purchaseId],
@@ -145,7 +152,7 @@ router.post('/:id/cancel', (req, res) => {
 
             const purchase = results[0];
 
-            // Update purchase status
+            // Update status pembelian
             db.query(
                 'UPDATE pembelian SET status = "cancelled", cancelled_at = NOW() WHERE id = ?',
                 [purchaseId],
@@ -164,13 +171,36 @@ router.post('/:id/cancel', (req, res) => {
                                 console.error(err);
                                 return res.status(500).send('Database error');
                             }
-                            res.redirect('/purchases');
+
+                            // Insert history stock masuk (karena dibatalkan)
+                            db.query(
+                                'INSERT INTO stock_history (produk_id, jenis, jumlah, keterangan) VALUES (?, ?, ?, ?)',
+                                [purchase.produk_id, 'masuk', purchase.jumlah, `Pembatalan pembelian #${purchaseId}`],
+                                (err) => {
+                                    if (err) console.error(err);
+                                    res.redirect('/purchases');
+                                }
+                            );
                         }
                     );
                 }
             );
         }
     );
+});
+
+// ====== POST: Reset semua pembelian ======
+router.post('/reset', (req, res) => {
+    // Delete semua pembelian
+    db.query('DELETE FROM pembelian', (err) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).send('Database error saat reset pembelian');
+        }
+
+        console.log('✅ Semua data pembelian berhasil direset');
+        res.redirect('/purchases');
+    });
 });
 
 module.exports = router;

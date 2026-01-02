@@ -36,12 +36,20 @@
                         <div class="menu-icon" style="background: url('/icons/purchases.svg') center/contain no-repeat;"></div>
                         <span class="menu-text">Pembelian</span>
                     </a>
+                    <a href="/history" class="menu-item">
+                        <div class="menu-icon" style="background: url('/icons/history.svg') center/contain no-repeat;"></div>
+                        <span class="menu-text">History</span>
+                    </a>
                 </div>
 
                 <div class="menu-section">
                     <div class="menu-label">Transaksi</div>
-                    <a href="/purchases/add" class="menu-item">
+                    <a href="/products/add" class="menu-item">
                         <div class="menu-icon" style="background: url('/icons/add.svg') center/contain no-repeat;"></div>
+                        <span class="menu-text">Tambah Produk</span>
+                    </a>
+                    <a href="/purchases/add" class="menu-item">
+                        <div class="menu-icon" style="background: url('/icons/cart.svg') center/contain no-repeat;"></div>
                         <span class="menu-text">Tambah Pembelian</span>
                     </a>
                 </div>
@@ -120,8 +128,12 @@
                         <h2 class="section-title">Quick Actions</h2>
                     </div>
                     <div style="display: flex; gap: 15px; flex-wrap: wrap;">
-                        <a href="/purchases/add" class="btn btn-primary">
+                        <a href="/products/add" class="btn btn-primary">
                             <img src="/icons/plus.svg" class="btn-icon" style="filter: brightness(0) invert(1);">
+                            Tambah Produk
+                        </a>
+                        <a href="/purchases/add" class="btn btn-primary">
+                            <img src="/icons/cart.svg" class="btn-icon" style="filter: brightness(0) invert(1);">
                             Tambah Pembelian
                         </a>
                         <a href="/purchases" class="btn btn-secondary">
@@ -131,6 +143,10 @@
                         <a href="/products" class="btn btn-secondary">
                             <img src="/icons/box.svg" class="btn-icon">
                             Kelola Produk
+                        </a>
+                        <a href="/history" class="btn btn-secondary">
+                            <img src="/icons/history.svg" class="btn-icon">
+                            Lihat History Stock
                         </a>
                     </div>
                 </div>
